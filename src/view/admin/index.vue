@@ -40,13 +40,15 @@ import { Editor, Toolbar } from '@wangeditor/editor-for-vue';
 import { IDomEditor, IEditorConfig } from '@wangeditor/core';
 import { ElMessage } from 'element-plus';
 import { createPosts, getDetail, updatePost } from '@/axios/request';
-import { useRoute } from 'vue-router';
+import { useRoute, useRouter } from 'vue-router';
 export default defineComponent({
   components: { Editor, Toolbar },
   setup() {
     // 编辑器实例，必须用 shallowRef
     const editorRef = shallowRef();
     const router = useRoute();
+    const route = useRouter();
+
     const query = router.query;
     const id = query.id as string;
 
@@ -177,6 +179,7 @@ export default defineComponent({
               message: '保存成功',
               type: 'success',
             });
+            route.push('/home');
             return;
           }
           ElMessage.success({
