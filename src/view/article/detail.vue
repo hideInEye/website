@@ -15,6 +15,7 @@
 import { defineComponent, onMounted, reactive } from 'vue';
 import { deletePosts, getDetail } from '@/axios/request';
 import { useRoute, useRouter } from 'vue-router';
+import { ElMessage } from 'element-plus';
 
 export default defineComponent({
   setup() {
@@ -54,8 +55,16 @@ export default defineComponent({
       if (!id) return;
       deletePosts(id).then((res: any) => {
         if (res.code > 300) {
+          ElMessage.error({
+            message: res.message,
+            type: 'error',
+          });
         } else {
-          router.replace('/');
+          ElMessage.success({
+            message: '删除成功',
+            type: 'success',
+          });
+          router.push('/home');
         }
       });
     };
