@@ -1,1 +1,9 @@
+.agents
+.next
 **/*.d.ts
+coverage
+node_modules
+playwright-report
+pnpm-lock.yaml
+public/image
+test-results
