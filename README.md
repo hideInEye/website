@@ -59,4 +59,8 @@ pnpm audit:lighthouse
 - `tests/e2e`：浏览器功能、视觉和无障碍验收。
 - `docs/rebuild-execution-plan.md`：本次全栈重建的执行状态与验收清单。
 
-Docker Compose 只用于服务器部署；宿主机 MySQL/MinIO、TLS、备份、恢复和回滚运行手册位于相邻的 `website-server` 仓库。本地开发不启动 Compose。旧数据库中的 11 篇有效文章已迁入 `sunset_blog`；媒体对象迁移与最终切流仍按运行手册单独执行。
+Docker Compose 只用于服务器部署；宿主机 MySQL/MinIO、Nginx、备份、恢复和回滚运行手册位于相邻的 `website-server` 仓库。本地开发不启动 Compose。
+
+提交到部署分支后，`Publish Web image` 工作流会在 GitHub Actions 中构建并发布 `ghcr.io/hideineye/sunset-footprints-web:deploy`。低内存服务器只需拉取该镜像，不需要安装 Node.js、构建前端或保留本仓库；服务器部署命令统一由 `website-server/scripts/deploy.sh` 提供。
+
+旧数据库中的 11 篇有效文章已迁入 `sunset_blog`；媒体对象迁移与最终切流仍按运行手册单独执行。

@@ -15,9 +15,9 @@
 - [x] 视觉方向为“暮光观测日志”，首页时间线和文章阅读进度共享“日落轨迹”语言。
 - [x] MinIO 使用外部既有服务；Compose 不创建 MinIO 实例或数据卷。
 - [x] MinIO 最终拓扑确定：宿主机 `localhost:9000`，容器使用 `host.docker.internal:9000`，浏览器通过站点 `/media/` 同源代理访问。
-- [x] MinIO 内部链路允许 HTTP；Nginx 终止站点 TLS，因此浏览器不存在 MinIO 混合内容，也不需要 Bucket CORS。
+- [x] MinIO 内部链路允许 HTTP；浏览器始终通过站点同源 `/media/` 访问。站点当前可显式使用临时 HTTP，后续由宿主机 Nginx 终止 TLS。
 - [x] 本地开发明确不使用 Docker：前端 `pnpm dev`，后端 `pnpm start:dev`，直接连接本机 MySQL 和 MinIO；开发邮件链接输出到后端终端。
-- [x] Docker Compose 只用于服务器构建部署、预检、备份和恢复。
+- [x] Docker Compose 只用于服务器拉取部署、预检、备份和恢复；服务器不执行镜像构建。
 - [x] 服务器 MySQL 与 MinIO 均复用宿主机现有服务，Compose 不创建数据库、对象存储或对应数据卷。
 - [x] 真实旧数据库文章迁移已执行；媒体对象迁移和最终切流保留为后续独立步骤。
 
@@ -118,7 +118,7 @@
 - [x] Comments：首条待审、后续直发、一级回复、本人删除、本人列表和管理员审核。
 - [x] Bookmarks：状态查询、幂等收藏/取消和私有列表；不会返回未发布文章。
 - [x] Media：鉴权预签名上传、完成确认、对象元数据 MIME/大小复核和 URL 生成。
-- [x] Mail：开发把验证/重置链接输出到后端终端，生产强制使用 SMTP；邮箱统一规范化。
+- [x] Mail：`MAIL_MODE=log` 不连接 SMTP并把验证/重置链接输出到 API 日志；后续可切换为 `smtp`，邮箱统一规范化。
 - [x] 密码使用 Argon2id；旧弱密码不迁移。
 - [x] 短期访问令牌与 30 天刷新令牌；刷新令牌旋转且数据库只保存哈希。
 - [x] Cookie 使用 `HttpOnly`、生产 `Secure`、`SameSite=Lax`；写请求验证 Origin。
@@ -155,12 +155,13 @@
 ### 5.1 容器和网络
 
 - [x] 前端和后端均使用 Node.js 22 多阶段 Dockerfile；Next.js 运行 standalone 产物。
-- [x] Compose 只管理服务器部署所需的 Nginx、Web、API 和一次性 migrate；MySQL、MinIO、本地 Mailpit 均不进入 Compose 生命周期。
+- [x] Compose 只管理服务器部署所需的 Web、API 和一次性 migrate；MySQL、MinIO、Nginx、本地 Mailpit 均不进入 Compose 生命周期。
 - [x] `mysql-client` 与 `minio-client` 只在 `ops` profile 中用于初始化、预检、备份和恢复。
-- [x] API 和 migrate 通过 `host.docker.internal` 连接宿主机 MySQL；API 同时连接内部网与出口网，Nginx 是站点唯一入口。
-- [x] Nginx 将 `/api` 转发到 NestJS、页面转发 Next.js，并将 `/media/` 同源转发到宿主机 MinIO。
-- [x] Nginx 关闭页面流式缓冲，设置上传大小、安全头与静态资源长期缓存。
-- [x] 提供 HTTP 基础配置与 TLS overlay；生产 Cookie、HSTS 和证书挂载由环境控制。
+- [x] API 和 migrate 通过 `host.docker.internal` 连接宿主机 MySQL；Web/API 分别只绑定 `127.0.0.1:18080` 和 `127.0.0.1:18081`。
+- [x] 宿主机 Nginx 将页面转发到 Next.js、`/api` 转发到 NestJS，并将 `/media/` 同源转发到宿主机 MinIO。
+- [x] 宿主机 Nginx 关闭页面流式缓冲，并设置上传大小和安全响应头。
+- [x] TLS 统一由宿主机 Nginx 管理，不再维护 Compose Nginx 或 TLS overlay。
+- [x] Web/API 镜像由 GitHub Actions 发布到 GHCR；服务器只拉取镜像，API 与 migrate 共用同一镜像。
 - [x] MySQL 与 MinIO 数据都由宿主机服务负责持久化、访问控制和异机备份，Compose 不持有数据卷。
 
 ### 5.2 运维脚本和演练证据
@@ -168,25 +169,25 @@
 - [x] `backup.sh` 在停止写入口后创建 MySQL gzip 与外部 Bucket tar.gz，使用临时文件保证产物原子发布。
 - [x] `restore.sh` 先校验归档并要求输入 `RESTORE`，随后重建数据库并用 `mc mirror --remove` 恢复专用 Bucket。
 - [x] 新增 `init-host-mysql.sh`，幂等创建目标库、专用非 root 应用账号并验证字符集；API 不接收 root 凭据。
-- [x] `preflight.sh` 自动拒绝占位 Secret、不安全文件权限、MinIO 管理员密钥和无效 TLS，并检查宿主机 MySQL 应用连接、字符集、`ngram` 及宿主机 Bucket 的写/读/删与匿名读取；失败路径也会清理探针。
+- [x] `preflight.sh` 自动拒绝占位 Secret、不安全文件权限、MinIO 管理员密钥和无效站点来源，并检查宿主机 MySQL 应用连接、字符集、`ngram` 及宿主机 Bucket 的写/读/删与匿名读取；失败路径也会清理探针。
 - [x] 提供 `deploy/minio-policy.json`，只授予默认 Bucket 的定位/列举与对象读写删除权限。
 - [x] `smoke-deployment.sh` 自动验证首页、关于页、live/ready、robots、sitemap、RSS、数据库状态和安全头，可选检查文章、媒体及旧链接。
 - [x] 部署手册覆盖首次部署、宿主机 MinIO/最小权限、备份、恢复、升级、回滚和凭据轮换。
-- [x] 改为宿主机 MySQL 之前的 Compose 基础配置与 TLS overlay 已通过 `docker compose config --quiet`；最新拓扑按用户要求不重新执行。
+- [x] 改为宿主机 MySQL 之前的 Compose 基础配置与 TLS overlay 曾通过 `docker compose config --quiet`；当前低内存拉取部署拓扑按用户要求不运行测试或构建。
 - [x] 用户最终指定使用宿主机 `localhost:9000`，远程 `47.94.129.177:9000` 不再作为应用配置。
 - [x] 此前的容器数据库基线中，两个镜像在独立 Compose 项目构建成功，空库迁移、API/Web 健康及 Nginx 首页/ready 均已验证；该结果不冒充最新宿主机 MySQL 拓扑的验证。
 - [x] 独立恢复演练：备份后新增数据库记录、覆盖原对象并新增对象；恢复后记录归零、原对象内容复原、新对象删除。
 - [x] 部署预检隔离演练：私有 Bucket 按预期在公开读取处失败且无残留对象；开启匿名只读后，完整预检通过。
 - [x] MinIO 权限隔离演练：root 凭据按预期在任何探针写入前被拒绝；套用 `deploy/minio-policy.json` 的专用账号通过对象读写、元数据与匿名读取检查，结束后无探针残留。
 - [x] 演练临时容器、网络、卷、环境文件和合成备份已删除；原 `sunset-footprints` 环境保持健康且 ready 为 200。
-- [x] 两个仓库 CI 均执行 lint、类型检查、测试、生产构建和 commit SHA 镜像构建。
+- [x] 两个仓库新增独立镜像发布工作流，生成稳定 `deploy` 标签和可回滚的 `sha-<commit>` 标签。
 - [ ] 最新的宿主机 MySQL、`host.docker.internal` 和 `/media/` 同源代理改动按用户要求不运行构建或通用测试；由部署方使用 `docs/host-minio-commands.md` 在服务器验收。
 
 ### 5.3 实际生产部署前仍需提供
 
 - [ ] 站点域名、服务器部署目录和有效 TLS 证书。
 - [ ] 宿主机 MinIO 专用 Bucket 名和最小权限 access/secret key，并确认容器可经 `host.docker.internal:9000` 连接。
-- [ ] 为宿主机 MySQL 生成专用应用账号密码，注入 JWT、SMTP 等生产 Secret，并轮换旧仓库历史中出现过的全部凭据。
+- [ ] 为宿主机 MySQL 生成专用应用账号密码并注入 JWT；SMTP 暂用 `MAIL_MODE=log`，后续启用真实邮件时再配置并轮换相关 Secret。
 - [ ] 在目标服务器执行 Compose 启动和注册、邮件、登录、发布、上传、读取冒烟。
 
 ## 6. 测试与验收
