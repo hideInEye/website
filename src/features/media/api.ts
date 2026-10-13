@@ -11,6 +11,22 @@ interface ICompletedMedia {
 
 const ALLOWED_IMAGE_TYPES = new Set(["image/jpeg", "image/png", "image/webp", "image/gif"]);
 const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
+const CONTAINER_ONLY_HOSTS = new Set(["host.docker.internal", "minio"]);
+
+export function browserUploadUrl(uploadUrl: string, pageOrigin = window.location.origin): string {
+  const signed = new URL(uploadUrl, pageOrigin);
+  const page = new URL(pageOrigin);
+  const loopbackHosts = ["localhost", "127.0.0.1", "::1"];
+  const isRemoteLoopback =
+    loopbackHosts.includes(signed.hostname) && !loopbackHosts.includes(page.hostname);
+
+  if (!CONTAINER_ONLY_HOSTS.has(signed.hostname) && !isRemoteLoopback) return signed.toString();
+
+  const proxyPath = signed.pathname.startsWith("/media/")
+    ? signed.pathname
+    : `/media${signed.pathname}`;
+  return `${page.origin}${proxyPath}${signed.search}`;
+}
 
 async function imageDimensions(file: File): Promise<{ width?: number; height?: number }> {
   try {
@@ -33,7 +49,7 @@ export async function uploadImage(file: File): Promise<string> {
     method: "POST",
     body: { fileName: file.name, mimeType: file.type, size: file.size }
   });
-  const upload = await fetch(pending.uploadUrl, {
+  const upload = await fetch(browserUploadUrl(pending.uploadUrl), {
     method: "PUT",
     headers: { "Content-Type": file.type },
     body: file
@@ -43,5 +59,5 @@ export async function uploadImage(file: File): Promise<string> {
     method: "POST",
     body: await dimensionsPromise
   });
-  return completed.url;
+  return browserUploadUrl(completed.url);
 }

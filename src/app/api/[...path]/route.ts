@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 
-import { serverEnv } from "@/config/env.server";
+import { getServerEnv } from "@/config/env.server";
 
 async function proxy(request: Request, context: { params: Promise<{ path: string[] }> }) {
-  const apiUrl = serverEnv.API_INTERNAL_URL;
+  const apiUrl = getServerEnv().API_INTERNAL_URL;
   if (!apiUrl)
     return NextResponse.json(
       { statusCode: 503, code: "API_UNAVAILABLE", message: "后端 API 尚未配置" },

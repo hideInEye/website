@@ -1,37 +1,41 @@
 import type { Metadata, Viewport } from "next";
+import { connection } from "next/server";
 import "@fontsource-variable/noto-sans-sc";
 import "@fontsource-variable/jetbrains-mono";
 
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
-import { serverEnv } from "@/config/env.server";
+import { getServerEnv } from "@/config/env.server";
 import { SITE_CONFIG } from "@/config/site";
 
 import "./fonts.css";
 import "./globals.css";
 
-export const metadata: Metadata = {
-  metadataBase: new URL(serverEnv.SITE_URL),
-  title: { default: SITE_CONFIG.name, template: `%s · ${SITE_CONFIG.name}` },
-  description: SITE_CONFIG.description,
-  applicationName: SITE_CONFIG.name,
-  authors: [{ name: "Juvenile" }],
-  creator: "Juvenile",
-  category: "technology",
-  openGraph: {
-    type: "website",
-    locale: "zh_CN",
-    siteName: SITE_CONFIG.name,
-    title: SITE_CONFIG.name,
-    description: SITE_CONFIG.description
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: SITE_CONFIG.name,
-    description: SITE_CONFIG.description
-  },
-  alternates: { types: { "application/rss+xml": "/rss.xml" } }
-};
+export async function generateMetadata(): Promise<Metadata> {
+  await connection();
+  return {
+    metadataBase: new URL(getServerEnv().SITE_URL),
+    title: { default: SITE_CONFIG.name, template: `%s · ${SITE_CONFIG.name}` },
+    description: SITE_CONFIG.description,
+    applicationName: SITE_CONFIG.name,
+    authors: [{ name: "Juvenile" }],
+    creator: "Juvenile",
+    category: "technology",
+    openGraph: {
+      type: "website",
+      locale: "zh_CN",
+      siteName: SITE_CONFIG.name,
+      title: SITE_CONFIG.name,
+      description: SITE_CONFIG.description
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: SITE_CONFIG.name,
+      description: SITE_CONFIG.description
+    },
+    alternates: { types: { "application/rss+xml": "/rss.xml" } }
+  };
+}
 
 export const viewport: Viewport = {
   colorScheme: "light dark",

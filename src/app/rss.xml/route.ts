@@ -1,5 +1,7 @@
+import { connection } from "next/server";
+
+import { getServerEnv } from "@/config/env.server";
 import { getPosts } from "@/features/articles";
-import { serverEnv } from "@/config/env.server";
 
 function escapeXml(value: string) {
   return value
@@ -11,7 +13,8 @@ function escapeXml(value: string) {
 }
 
 export async function GET() {
-  const base = serverEnv.SITE_URL;
+  await connection();
+  const base = getServerEnv().SITE_URL;
   const posts = await getPosts({ pageSize: 50 });
   const items = posts.items
     .map(

@@ -7,6 +7,7 @@ export { MarkdownContent } from "./components/markdown-content";
 export { Pagination } from "./components/pagination";
 export { ReadingProgress } from "./components/reading-progress";
 export { SunsetTimeline } from "./components/sunset-timeline";
+export { TaxonomyArchive } from "./components/taxonomy-archive";
 export { extractArticleHeadings } from "./markdown";
 export type { IArticleHeading } from "./markdown";
 export type { Author, PaginatedPosts, PostDetail, PostSummary, Taxonomy } from "./types";

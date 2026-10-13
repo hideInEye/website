@@ -4,6 +4,8 @@ import { ArrowRightIcon, CompassIcon, SparklesIcon } from "lucide-react";
 import { buttonVariants } from "@/components/ui/button";
 import { getCategories, getPosts, getTags, Pagination, SunsetTimeline } from "@/features/articles";
 
+export const dynamic = "force-dynamic";
+
 export default async function HomePage({
   searchParams
 }: {

@@ -1,8 +1,9 @@
 import "server-only";
 
 import { cookies } from "next/headers";
+import { connection } from "next/server";
 
-import { serverEnv } from "@/config/env.server";
+import { getServerEnv } from "@/config/env.server";
 import { ApiClientError, readApiResponse } from "./response";
 
 export interface IServerApiOptions {
@@ -15,7 +16,8 @@ export async function serverApiRequest<T>(
   path: string,
   { authenticated = false, revalidate, tags }: IServerApiOptions = {}
 ): Promise<T> {
-  const apiUrl = serverEnv.API_INTERNAL_URL;
+  await connection();
+  const apiUrl = getServerEnv().API_INTERNAL_URL;
   if (!apiUrl) {
     throw new ApiClientError(503, {
       code: "API_UNAVAILABLE",

@@ -19,6 +19,17 @@ export function createTaxonomy(
   return browserApiRequest(`/admin/${type}`, { method: "POST", body: taxonomy });
 }
 
+export function updateTaxonomy(
+  type: "categories" | "tags",
+  id: string,
+  taxonomy: Pick<IAdminTaxonomy, "name" | "slug"> & { description?: string }
+): Promise<IAdminTaxonomy> {
+  return browserApiRequest(`/admin/${type}/${encodeURIComponent(id)}`, {
+    method: "PATCH",
+    body: taxonomy
+  });
+}
+
 export function deleteTaxonomy(
   type: "categories" | "tags",
   id: string

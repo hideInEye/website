@@ -1,11 +1,13 @@
 import type { MetadataRoute } from "next";
-import { serverEnv } from "@/config/env.server";
+import { connection } from "next/server";
+import { getServerEnv } from "@/config/env.server";
 import { getCategories, getPosts, getTags } from "@/features/articles";
 
 export const dynamic = "force-dynamic";
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
-  const base = serverEnv.SITE_URL;
+  await connection();
+  const base = getServerEnv().SITE_URL;
   const [posts, categories, tags] = await Promise.all([
     getPosts({ pageSize: 1000 }),
     getCategories(),

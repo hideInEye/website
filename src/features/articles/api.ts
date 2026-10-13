@@ -1,13 +1,15 @@
 import { cache } from "react";
+import { connection } from "next/server";
 
-import { serverEnv } from "@/config/env.server";
+import { getServerEnv } from "@/config/env.server";
 import { ApiClientError } from "@/shared/api-client/response";
 import { serverApiRequest } from "@/shared/api-client/server";
 import { categories, demoPosts, tags } from "./demo-data";
 import type { PaginatedPosts, PostDetail, Taxonomy } from "./types";
 
-function isDemoMode() {
-  return !serverEnv.API_INTERNAL_URL;
+async function isDemoMode() {
+  await connection();
+  return !getServerEnv().API_INTERNAL_URL;
 }
 
 function getPublicApi<T>(path: string) {
@@ -15,7 +17,7 @@ function getPublicApi<T>(path: string) {
 }
 
 export const getPostBySlug = cache(async (slug: string): Promise<PostDetail | null> => {
-  if (isDemoMode()) return demoPosts.find((post) => post.slug === slug) ?? null;
+  if (await isDemoMode()) return demoPosts.find((post) => post.slug === slug) ?? null;
 
   try {
     return await getPublicApi<PostDetail>(`/posts/${encodeURIComponent(slug)}`);
@@ -43,7 +45,7 @@ export async function getPosts({
   if (tag) params.set("tag", tag);
   if (query) params.set("q", query);
 
-  if (!isDemoMode()) return getPublicApi<PaginatedPosts>(`/posts?${params.toString()}`);
+  if (!(await isDemoMode())) return getPublicApi<PaginatedPosts>(`/posts?${params.toString()}`);
 
   const normalizedQuery = query?.trim().toLocaleLowerCase("zh-CN");
   const filtered = demoPosts.filter((post) => {
@@ -70,11 +72,11 @@ export async function getPosts({
 }
 
 export async function getCategories(): Promise<Taxonomy[]> {
-  return isDemoMode() ? categories : getPublicApi<Taxonomy[]>("/categories");
+  return (await isDemoMode()) ? categories : serverApiRequest<Taxonomy[]>("/categories");
 }
 
 export async function getTags(): Promise<Taxonomy[]> {
-  return isDemoMode() ? tags : getPublicApi<Taxonomy[]>("/tags");
+  return (await isDemoMode()) ? tags : serverApiRequest<Taxonomy[]>("/tags");
 }
 
 export async function getBookmarkState(postId: string): Promise<boolean> {

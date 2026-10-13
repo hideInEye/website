@@ -1,11 +1,11 @@
 import { NextResponse } from "next/server";
 
-import { serverEnv } from "@/config/env.server";
+import { getServerEnv } from "@/config/env.server";
 
 export async function GET(request: Request) {
   const url = new URL(request.url);
   const legacyId = url.searchParams.get("id");
-  const apiUrl = serverEnv.API_INTERNAL_URL;
+  const apiUrl = getServerEnv().API_INTERNAL_URL;
   if (legacyId && apiUrl) {
     try {
       const response = await fetch(

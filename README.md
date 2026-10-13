@@ -58,6 +58,8 @@ pnpm audit:lighthouse
 - `src/shared`：共享 API 契约和基础能力。
 - `tests/e2e`：浏览器功能、视觉和无障碍验收。
 - `docs/rebuild-execution-plan.md`：本次全栈重建的执行状态与验收清单。
+- `docs/requirements-rebaseline.md`：只基于已确认要求形成的需求复核基线。
+- `docs/remaining-work-plan.md`：分类、标签、媒体上传和服务器验收的剩余执行步骤。
 
 Docker Compose 只用于服务器部署；宿主机 MySQL/MinIO、Nginx、备份、恢复和回滚运行手册位于相邻的 `website-server` 仓库。本地开发不启动 Compose。
 

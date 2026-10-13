@@ -26,13 +26,15 @@ const environmentSchema = z.object({
   API_INTERNAL_URL: optionalOrigin
 });
 
-const parsed = environmentSchema.safeParse({
-  SITE_URL: process.env.SITE_URL,
-  API_INTERNAL_URL: process.env.API_INTERNAL_URL
-});
+export function getServerEnv() {
+  const parsed = environmentSchema.safeParse({
+    SITE_URL: process.env.SITE_URL,
+    API_INTERNAL_URL: process.env.API_INTERNAL_URL
+  });
 
-if (!parsed.success) {
-  throw new Error(`前端环境变量校验失败：${z.prettifyError(parsed.error)}`);
+  if (!parsed.success) {
+    throw new Error(`前端环境变量校验失败：${z.prettifyError(parsed.error)}`);
+  }
+
+  return parsed.data;
 }
-
-export const serverEnv = parsed.data;
