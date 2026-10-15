@@ -8,9 +8,13 @@ test("home page exposes the reading path", async ({ page }) => {
   await expect(firstArticle.getByRole("link")).toBeVisible();
 });
 
-test("taxonomy navigation uses the live category and tag directories", async ({ page }) => {
+test("taxonomy navigation uses the live category and tag directories", async ({
+  page,
+  isMobile
+}) => {
   await page.goto("/");
-  const navigation = page.getByRole("navigation", { name: "主导航" });
+  if (isMobile) await page.getByRole("button", { name: "打开菜单" }).click();
+  const navigation = page.getByRole("navigation", { name: isMobile ? "移动端导航" : "主导航" });
   const categoriesLink = navigation.getByRole("link", { name: "分类" });
   const tagsLink = navigation.getByRole("link", { name: "标签" });
 
@@ -26,8 +30,9 @@ test("taxonomy navigation uses the live category and tag directories", async ({ 
   await expect(page).toHaveURL(/\/categories\/craft$/);
   await expect(page.getByRole("heading", { level: 1, name: "工作方法" })).toBeVisible();
 
+  if (isMobile) await page.getByRole("button", { name: "打开菜单" }).click();
   await page
-    .getByRole("navigation", { name: "主导航" })
+    .getByRole("navigation", { name: isMobile ? "移动端导航" : "主导航" })
     .getByRole("link", { name: "标签" })
     .click();
   await expect(page).toHaveURL(/\/tags$/);

@@ -43,7 +43,7 @@ test("uses private account, bookmark and comment flows after login", async ({ pa
 
 test("guards admin pages and supports moderation and draft preview", async ({ page }) => {
   await page.goto("/admin");
-  await expect(page).toHaveURL(/\/login\?next=\/admin/);
+  await expect(page).toHaveURL(/\/login\?next=(?:\/|%2F)admin/);
 
   await signIn(page);
   await page.goto("/admin/comments");

@@ -1,9 +1,12 @@
-<!-- BEGIN:nextjs-agent-rules -->
+# Frontend project guidance
 
-# This is NOT the Next.js you know
+This branch uses Vite, React 19, React Router data routers, TypeScript, Tailwind CSS v4 and the existing shadcn/ui components. It has no Next.js runtime or server components.
 
-This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
-
-This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
-
-<!-- END:nextjs-agent-rules -->
+- Keep the existing page appearance, typography, CSS tokens and responsive behavior.
+- Put route declarations in `src/app/router.tsx`; feature pages, loaders and API services belong in `src/features/<feature>`. Cross-feature imports use that feature's `index.ts`.
+- Route loaders own server reads. Components use `useLoaderData`, local UI state and the shared browser API client. Revalidate the route after mutations that affect its data.
+- Browser requests use same-origin `/api/v1`; database, mail and MinIO credentials belong only to the Go backend. Never expose secrets using `VITE_*` variables.
+- Local development uses independent frontend/backend commands. Production builds images in GitHub Actions and serves the frontend with Nginx on container port 3000.
+- The new frontend image tag is `ghcr.io/hideineye/sunset-footprints-web:vite`; do not overwrite the previous `:deploy` image during this refactor.
+- The original `../website-server` is read-only. The new Go service is `../website-go-server`.
+- Respect the user's instruction not to run builds or test suites unless they request them; report verification gaps explicitly. Static type and lint checks are available.

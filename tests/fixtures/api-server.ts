@@ -113,6 +113,10 @@ const server = createServer(async (request, response) => {
   const path = url.pathname;
 
   if (path === "/health") return send(response, 200, { ready: true });
+  if (request.method === "GET" && path === "/article/detail") {
+    response.writeHead(308, { Location: `/articles/${posts[0].slug}` });
+    return response.end();
+  }
   if (!path.startsWith("/api/v1/")) return error(response, 404, "接口不存在");
 
   if (request.method === "GET" && path === "/api/v1/categories") {

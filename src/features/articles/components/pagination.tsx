@@ -17,10 +17,7 @@ export function Pagination({
   return (
     <nav className="mt-10 flex items-center justify-between border-t pt-6" aria-label="分页">
       {currentPage > 1 ? (
-        <Link
-          to={buildHref(currentPage - 1)}
-          className={buttonVariants({ variant: "outline" })}
-        >
+        <Link to={buildHref(currentPage - 1)} className={buttonVariants({ variant: "outline" })}>
           <ChevronLeftIcon data-icon="inline-start" />
           上一页
         </Link>

@@ -71,6 +71,7 @@
     "prettier": "^3.6.2",
     "subset-font": "^2.9.0",
     "tailwindcss": "^4.1.13",
+    "tsx": "^4.20.5",
     "typescript": "^5.9.2",
     "vite": "^6.4.1",
     "vitest": "^3.2.4"

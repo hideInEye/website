@@ -1,4 +1,5 @@
 import { Link } from "react-router-dom";
+import { useState } from "react";
 import { MenuIcon, SearchIcon, UserRoundIcon } from "lucide-react";
 
 import { SunsetMark } from "@/components/sunset-mark";
@@ -23,6 +24,7 @@ const navigation = [
 ] as const;
 
 export function SiteHeader() {
+  const [menuOpen, setMenuOpen] = useState(false);
   return (
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/82 backdrop-blur-xl supports-[backdrop-filter]:bg-background/68">
       <div className="mx-auto flex h-16 max-w-6xl items-center px-4 sm:px-6 lg:px-8">
@@ -65,7 +67,7 @@ export function SiteHeader() {
             </Link>
           </Button>
 
-          <Sheet>
+          <Sheet open={menuOpen} onOpenChange={setMenuOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon-sm" className="md:hidden" aria-label="打开菜单">
                 <MenuIcon />
@@ -84,6 +86,7 @@ export function SiteHeader() {
                   <Link
                     key={item.href}
                     to={item.href}
+                    onClick={() => setMenuOpen(false)}
                     className="rounded-lg px-3 py-3 text-base font-medium transition-colors hover:bg-accent"
                   >
                     {item.label}
@@ -91,6 +94,7 @@ export function SiteHeader() {
                 ))}
                 <Link
                   to="/account"
+                  onClick={() => setMenuOpen(false)}
                   className="mt-3 rounded-lg border px-3 py-3 text-base font-medium"
                 >
                   我的账号

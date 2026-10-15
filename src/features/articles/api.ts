@@ -10,8 +10,18 @@ export async function getPostBySlug(slug: string): Promise<PostDetail | null> {
   }
 }
 
-export function getPosts({ page = 1, pageSize = 6, category, tag, query }: {
-  page?: number; pageSize?: number; category?: string; tag?: string; query?: string;
+export function getPosts({
+  page = 1,
+  pageSize = 6,
+  category,
+  tag,
+  query
+}: {
+  page?: number;
+  pageSize?: number;
+  category?: string;
+  tag?: string;
+  query?: string;
 } = {}): Promise<PaginatedPosts> {
   const params = new URLSearchParams({ page: String(page), pageSize: String(pageSize) });
   if (category) params.set("category", category);
@@ -25,7 +35,9 @@ export const getTags = () => browserApiRequest<Taxonomy[]>("/tags");
 
 export async function getBookmarkState(postId: string): Promise<boolean> {
   try {
-    return (await browserApiRequest<{ bookmarked: boolean }>(`/bookmarks/${encodeURIComponent(postId)}`)).bookmarked;
+    return (
+      await browserApiRequest<{ bookmarked: boolean }>(`/bookmarks/${encodeURIComponent(postId)}`)
+    ).bookmarked;
   } catch (error) {
     if (error instanceof ApiClientError && error.status === 401) return false;
     throw error;

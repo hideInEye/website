@@ -1,6 +1,14 @@
 import { redirect, type LoaderFunctionArgs } from "react-router-dom";
 import { ApiClientError } from "@/shared/api-client";
-import { getAdminComments, getAdminDashboard, getAdminPost, getAdminPosts, getAdminUsers, getCurrentUser, getEditorTaxonomy } from "./queries";
+import {
+  getAdminComments,
+  getAdminDashboard,
+  getAdminPost,
+  getAdminPosts,
+  getAdminUsers,
+  getCurrentUser,
+  getEditorTaxonomy
+} from "./queries";
 
 export async function adminLoader({ request }: LoaderFunctionArgs) {
   try {

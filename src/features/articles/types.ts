@@ -2,15 +2,15 @@ export interface Taxonomy {
   id: string;
   name: string;
   slug: string;
-  description?: string;
+  description?: string | null;
   postCount?: number;
 }
 
 export interface Author {
   username: string;
   displayName: string;
-  bio?: string;
-  avatarUrl?: string;
+  bio?: string | null;
+  avatarUrl?: string | null;
 }
 
 export interface PostSummary {
@@ -23,9 +23,9 @@ export interface PostSummary {
   category: Taxonomy;
   tags: Taxonomy[];
   author: Author;
-  coverUrl?: string;
-  seoTitle?: string;
-  seoDescription?: string;
+  coverUrl?: string | null;
+  seoTitle?: string | null;
+  seoDescription?: string | null;
 }
 
 export interface PostDetail extends PostSummary {

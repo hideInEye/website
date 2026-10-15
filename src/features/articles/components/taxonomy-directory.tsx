@@ -49,7 +49,7 @@ export function TaxonomyDirectory({
       {items.length > 0 ? (
         <section className={styles.grid} aria-label={label + "列表"}>
           {items.map((item) => {
-            const href = ("/" + basePath + "/" + item.slug);
+            const href = "/" + basePath + "/" + item.slug;
 
             return (
               <Card key={item.id} className={styles.card}>

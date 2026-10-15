@@ -18,7 +18,7 @@ export function SiteFooter() {
           <Link to="/about" className="hover:text-foreground">
             关于
           </Link>
-          <Link to="/rss.xml" className="hover:text-foreground">
+          <Link to="/rss.xml" reloadDocument className="hover:text-foreground">
             RSS
           </Link>
           <Link to="/admin" className="hover:text-foreground">

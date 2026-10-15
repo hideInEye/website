@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import { ArrowUpRightIcon } from "lucide-react";
 
@@ -27,7 +28,9 @@ export default function AdminLayout() {
           </Button>
         </div>
       </aside>
-      <main className="min-w-0 lg:col-start-2"><Outlet /></main>
+      <main className="min-w-0 lg:col-start-2">
+        <Outlet />
+      </main>
     </div>
   );
 }

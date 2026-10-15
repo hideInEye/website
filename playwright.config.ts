@@ -27,7 +27,7 @@ export default defineConfig({
       timeout: 30_000
     },
     {
-      command: "API_INTERNAL_URL=http://127.0.0.1:4010 SITE_URL=http://127.0.0.1:3000 pnpm dev",
+      command: "API_PROXY_TARGET=http://127.0.0.1:4010 pnpm dev",
       url: "http://127.0.0.1:3000",
       reuseExistingServer: false,
       timeout: 120_000

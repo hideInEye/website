@@ -1,5 +1,6 @@
 .agents
 .next
+dist
 **/*.d.ts
 coverage
 node_modules

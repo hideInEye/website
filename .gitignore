@@ -33,3 +33,5 @@ test-results
 *.sw?
 auto-imports.d.ts
 components.d.ts
+
+.pnpm

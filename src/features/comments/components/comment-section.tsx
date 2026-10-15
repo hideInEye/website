@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 import { MessageCircleIcon, ReplyIcon, SendIcon, XIcon } from "lucide-react";
-import { useNavigate, useRevalidator } from "react-router-dom";
+import { useRevalidator } from "react-router-dom";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -79,7 +79,6 @@ export function CommentSection({
   commentCount: number;
   comments: IComment[];
 }) {
-  const navigate = useNavigate();
   const revalidator = useRevalidator();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [content, setContent] = useState("");

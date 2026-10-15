@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useLoaderData } from "react-router-dom";
 import { previewPostLoader } from "../../loaders";
 import { ArrowLeftIcon } from "lucide-react";
@@ -39,7 +40,6 @@ export default function AdminPostPreviewPage() {
             <p className="text-lg leading-8 text-muted-foreground">{post.excerpt}</p>
           </header>
           {post.coverUrl ? (
-
             <img
               src={post.coverUrl}
               alt=""

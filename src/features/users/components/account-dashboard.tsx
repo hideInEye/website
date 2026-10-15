@@ -130,8 +130,7 @@ export function AccountDashboard({ overview }: { overview: IAccountOverview }) {
     try {
       await logout();
       toast.success("已退出登录");
-      void navigate("/", { replace: true });
-      void revalidator.revalidate();
+      await navigate("/", { replace: true });
     } catch (error) {
       toast.error(error instanceof ApiClientError ? error.message : "退出登录失败");
       setIsLoggingOut(false);

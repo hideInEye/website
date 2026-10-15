@@ -9,7 +9,7 @@ export default function EditPostPage() {
     <>
       <AdminPageHeader title="编辑文章" description={`最后更新：${post.updatedAt}`} />
       <div className="p-5 sm:p-8">
-        <PostEditorForm initialPost={post} categories={categories} tags={tags} />
+        <PostEditorForm key={post.id} initialPost={post} categories={categories} tags={tags} />
       </div>
     </>
   );

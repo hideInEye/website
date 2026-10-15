@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useLoaderData } from "react-router-dom";
 import { articleLoader } from "../../loaders";
 import { Clock3Icon, MessageCircleIcon } from "lucide-react";
@@ -34,7 +35,7 @@ export default function ArticlePage() {
 
   return (
     <main>
-      <ReadingProgress />
+      <ReadingProgress key={post.id} />
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd).replace(/</g, "\\u003c") }}
@@ -63,7 +64,7 @@ export default function ArticlePage() {
                 className="flex items-center gap-3 rounded-lg outline-none focus-visible:ring-2 focus-visible:ring-ring"
               >
                 <Avatar className="size-10">
-                  <AvatarImage src={post.author.avatarUrl} alt="" />
+                  <AvatarImage src={post.author.avatarUrl ?? undefined} alt="" />
                   <AvatarFallback>{post.author.displayName.slice(0, 1)}</AvatarFallback>
                 </Avatar>
                 <span>
@@ -77,6 +78,7 @@ export default function ArticlePage() {
                   {post.commentCount}
                 </span>
                 <BookmarkButton
+                  key={post.id}
                   postId={post.id}
                   initialCount={post.bookmarkCount}
                   initialBookmarked={bookmarked}
@@ -88,7 +90,6 @@ export default function ArticlePage() {
 
         {post.coverUrl ? (
           <figure className="mx-auto mt-8 max-w-5xl px-4 sm:px-6 lg:px-8">
-
             <img
               src={post.coverUrl}
               alt=""
@@ -112,7 +113,12 @@ export default function ArticlePage() {
                 </Link>
               ))}
             </div>
-            <CommentSection postId={post.id} commentCount={post.commentCount} comments={comments} />
+            <CommentSection
+              key={post.id}
+              postId={post.id}
+              commentCount={post.commentCount}
+              comments={comments}
+            />
           </div>
           <aside className="hidden lg:block">
             <ArticleTableOfContents headings={headings} className="sticky top-24" />

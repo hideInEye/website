@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { Outlet } from "react-router-dom";
 import { SunsetMark } from "@/components/sunset-mark";
 import { ThemeToggle } from "@/components/theme-toggle";
@@ -19,7 +20,9 @@ export default function AuthLayout() {
       <div className="absolute right-4 top-4 sm:right-7 sm:top-6">
         <ThemeToggle />
       </div>
-      <div className="relative z-10 w-full"><Outlet /></div>
+      <div className="relative z-10 w-full">
+        <Outlet />
+      </div>
     </main>
   );
 }

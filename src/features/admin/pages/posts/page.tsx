@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useLoaderData } from "react-router-dom";
 import { postsLoader } from "../../loaders";
 import { Edit3Icon, PlusIcon } from "lucide-react";
@@ -61,10 +62,7 @@ export default function AdminPostsPage() {
                     </TableCell>
                     <TableCell className="text-right">
                       <Button asChild variant="ghost" size="icon-sm">
-                        <Link
-                          to={`/admin/posts/${post.id}/edit`}
-                          aria-label={`编辑 ${post.title}`}
-                        >
+                        <Link to={`/admin/posts/${post.id}/edit`} aria-label={`编辑 ${post.title}`}>
                           <Edit3Icon />
                         </Link>
                       </Button>

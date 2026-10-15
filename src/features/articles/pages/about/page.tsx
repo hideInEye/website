@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { ArrowRightIcon, Code2Icon, MapIcon, NotebookPenIcon } from "lucide-react";
 
 import { PageHeading } from "@/components/page-heading";

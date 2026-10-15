@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import { useLoaderData } from "react-router-dom";
 import { homeLoader } from "../../loaders";
 import { ArrowRightIcon, CompassIcon, SparklesIcon } from "lucide-react";

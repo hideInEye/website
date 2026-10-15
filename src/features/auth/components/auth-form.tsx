@@ -1,7 +1,7 @@
 import { Link } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRightIcon } from "lucide-react";
-import { useNavigate, useRevalidator } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { type Resolver, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -66,7 +66,6 @@ export function AuthForm({
   nextPath?: string;
 }) {
   const navigate = useNavigate();
-  const revalidator = useRevalidator();
   const config = copy[mode];
   const form = useForm<FormValues>({
     resolver: zodResolver(schemas[mode]) as Resolver<FormValues>,
@@ -83,7 +82,6 @@ export function AuthForm({
     if (mode === "login") {
       toast.success("登录成功");
       void navigate(nextPath);
-      void revalidator.revalidate();
       return;
     }
     toast.success(
