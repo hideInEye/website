@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { FolderTreeIcon, TagsIcon } from "lucide-react";
 
 import { PageHeading } from "@/components/page-heading";
@@ -61,7 +61,7 @@ export function TaxonomyArchive({
           </EmptyHeader>
           <EmptyContent>
             <Button asChild variant="outline">
-              <Link href="/">返回首页</Link>
+              <Link to="/">返回首页</Link>
             </Button>
           </EmptyContent>
         </Empty>

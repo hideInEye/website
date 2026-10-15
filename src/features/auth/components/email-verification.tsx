@@ -1,6 +1,4 @@
-"use client";
-
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { CircleCheckIcon, MailCheckIcon, TriangleAlertIcon } from "lucide-react";
 import { useState } from "react";
 
@@ -63,7 +61,7 @@ export function EmailVerification({ token }: { token?: string }) {
           </Button>
         ) : null}
         <Link
-          href="/login"
+          to="/login"
           className={cn(buttonVariants({ variant: success ? "default" : "outline" }))}
         >
           {success ? "前往登录" : "返回登录"}

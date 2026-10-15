@@ -1,6 +1,4 @@
-"use client";
-
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import {
   BookmarkIcon,
@@ -9,7 +7,7 @@ import {
   Trash2Icon,
   UserRoundIcon
 } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useNavigate, useRevalidator } from "react-router-dom";
 import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
@@ -80,7 +78,8 @@ function EmptyState({
 }
 
 export function AccountDashboard({ overview }: { overview: IAccountOverview }) {
-  const router = useRouter();
+  const navigate = useNavigate();
+  const revalidator = useRevalidator();
   const [bookmarks, setBookmarks] = useState(overview.bookmarks);
   const [comments, setComments] = useState(overview.comments);
   const [removingId, setRemovingId] = useState<string>();
@@ -107,7 +106,7 @@ export function AccountDashboard({ overview }: { overview: IAccountOverview }) {
         avatarUrl: values.avatarUrl || undefined
       });
       toast.success("公开资料已保存");
-      router.refresh();
+      void revalidator.revalidate();
     } catch (error) {
       toast.error(error instanceof ApiClientError ? error.message : "资料保存失败");
     }
@@ -131,8 +130,8 @@ export function AccountDashboard({ overview }: { overview: IAccountOverview }) {
     try {
       await logout();
       toast.success("已退出登录");
-      router.replace("/");
-      router.refresh();
+      void navigate("/", { replace: true });
+      void revalidator.revalidate();
     } catch (error) {
       toast.error(error instanceof ApiClientError ? error.message : "退出登录失败");
       setIsLoggingOut(false);
@@ -277,7 +276,7 @@ export function AccountDashboard({ overview }: { overview: IAccountOverview }) {
                   <CardContent className="flex items-center justify-between gap-4">
                     <div className="min-w-0">
                       <Link
-                        href={`/articles/${post.slug}`}
+                        to={`/articles/${post.slug}`}
                         className="font-literary font-semibold hover:underline"
                       >
                         {post.title}
@@ -317,7 +316,7 @@ export function AccountDashboard({ overview }: { overview: IAccountOverview }) {
                   <CardContent className="flex flex-col gap-3">
                     <div className="flex flex-wrap items-center justify-between gap-2">
                       <Link
-                        href={`/articles/${comment.post.slug}`}
+                        to={`/articles/${comment.post.slug}`}
                         className="text-sm font-medium hover:underline"
                       >
                         {comment.post.title}

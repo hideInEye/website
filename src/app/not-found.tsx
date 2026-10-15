@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { TelescopeIcon } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
@@ -17,7 +17,7 @@ export default function NotFound() {
         <p className="mx-auto mt-4 max-w-md leading-7 text-muted-foreground">
           链接可能已经改变，或这篇文章还停留在草稿里。
         </p>
-        <Link href="/" className={`${buttonVariants()} mt-7`}>
+        <Link to="/" className={`${buttonVariants()} mt-7`}>
           回到首页
         </Link>
       </div>

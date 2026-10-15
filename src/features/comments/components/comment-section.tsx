@@ -1,8 +1,6 @@
-"use client";
-
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { MessageCircleIcon, ReplyIcon, SendIcon, XIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useNavigate, useRevalidator } from "react-router-dom";
 import { useRef, useState } from "react";
 import { toast } from "sonner";
 
@@ -41,7 +39,7 @@ function CommentItem({
         </Avatar>
         <div className="flex min-w-0 flex-1 flex-col gap-1.5">
           <div className="flex flex-wrap items-center gap-2 text-sm">
-            <Link href={`/u/${comment.user.username}`} className="font-semibold hover:underline">
+            <Link to={`/u/${comment.user.username}`} className="font-semibold hover:underline">
               {comment.user.displayName}
             </Link>
             <time dateTime={comment.createdAt} className="text-xs text-muted-foreground">
@@ -81,7 +79,8 @@ export function CommentSection({
   commentCount: number;
   comments: IComment[];
 }) {
-  const router = useRouter();
+  const navigate = useNavigate();
+  const revalidator = useRevalidator();
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const [content, setContent] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -101,7 +100,7 @@ export function CommentSection({
       setContent("");
       setReplyTo(undefined);
       toast.success(result.moderationRequired ? "评论已提交，审核后将公开" : "评论已发布");
-      router.refresh();
+      void revalidator.revalidate();
     } catch (error) {
       toast.error(
         error instanceof ApiClientError && error.status === 401

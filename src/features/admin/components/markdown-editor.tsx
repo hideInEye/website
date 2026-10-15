@@ -1,11 +1,8 @@
-"use client";
-
-import dynamic from "next/dynamic";
+import { lazy, Suspense } from "react";
 import { Skeleton } from "@/components/ui/skeleton";
 
-const MarkdownEditorInner = dynamic(
-  () => import("./markdown-editor-inner").then((module) => module.MarkdownEditorInner),
-  { ssr: false, loading: () => <Skeleton className="h-[34rem] w-full" /> }
+const MarkdownEditorInner = lazy(
+  () => import("./markdown-editor-inner").then((module) => ({ default: module.MarkdownEditorInner }))
 );
 
 export function MarkdownEditor(props: {
@@ -13,5 +10,5 @@ export function MarkdownEditor(props: {
   onChange: (value: string) => void;
   onImageUpload: (file: File) => Promise<string>;
 }) {
-  return <MarkdownEditorInner {...props} />;
+  return <Suspense fallback={<Skeleton className="h-[34rem] w-full" />}><MarkdownEditorInner {...props} /></Suspense>;
 }

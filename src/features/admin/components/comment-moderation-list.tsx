@@ -1,6 +1,4 @@
-"use client";
-
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { CheckIcon, MessageSquareTextIcon, XIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -62,7 +60,7 @@ export function CommentModerationList({ initialComments }: { initialComments: IA
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-2">
                 <Link
-                  href={`/u/${comment.user.username}`}
+                  to={`/u/${comment.user.username}`}
                   className="text-sm font-semibold hover:underline"
                 >
                   {comment.user.displayName} · @{comment.user.username}
@@ -71,7 +69,7 @@ export function CommentModerationList({ initialComments }: { initialComments: IA
               </div>
               <p className="mt-2 whitespace-pre-wrap text-sm leading-6">{comment.content}</p>
               <p className="mt-2 text-xs text-muted-foreground">
-                <Link href={`/articles/${comment.post.slug}`} className="hover:underline">
+                <Link to={`/articles/${comment.post.slug}`} className="hover:underline">
                   {comment.post.title}
                 </Link>
                 <span aria-hidden="true"> · </span>

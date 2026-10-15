@@ -1,6 +1,4 @@
-"use client";
-
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { MenuIcon, SearchIcon, UserRoundIcon } from "lucide-react";
 
 import { SunsetMark } from "@/components/sunset-mark";
@@ -29,7 +27,7 @@ export function SiteHeader() {
     <header className="sticky top-0 z-40 border-b border-border/70 bg-background/82 backdrop-blur-xl supports-[backdrop-filter]:bg-background/68">
       <div className="mx-auto flex h-16 max-w-6xl items-center px-4 sm:px-6 lg:px-8">
         <Link
-          href="/"
+          to="/"
           className="mr-8 flex items-center gap-2.5"
           aria-label={`${SITE_CONFIG.name}首页`}
         >
@@ -43,7 +41,7 @@ export function SiteHeader() {
           {navigation.map((item) => (
             <Link
               key={item.href}
-              href={item.href}
+              to={item.href}
               className={cn(
                 buttonVariants({ variant: "ghost", size: "sm" }),
                 "text-muted-foreground hover:text-foreground"
@@ -56,13 +54,13 @@ export function SiteHeader() {
 
         <div className="ml-auto flex items-center gap-1">
           <Button asChild variant="ghost" size="icon-sm">
-            <Link href="/search" aria-label="搜索文章">
+            <Link to="/search" aria-label="搜索文章">
               <SearchIcon />
             </Link>
           </Button>
           <ThemeToggle />
           <Button asChild variant="ghost" size="icon-sm" className="hidden sm:inline-flex">
-            <Link href="/account" aria-label="进入我的账号">
+            <Link to="/account" aria-label="进入我的账号">
               <UserRoundIcon />
             </Link>
           </Button>
@@ -85,14 +83,14 @@ export function SiteHeader() {
                 {navigation.map((item) => (
                   <Link
                     key={item.href}
-                    href={item.href}
+                    to={item.href}
                     className="rounded-lg px-3 py-3 text-base font-medium transition-colors hover:bg-accent"
                   >
                     {item.label}
                   </Link>
                 ))}
                 <Link
-                  href="/account"
+                  to="/account"
                   className="mt-3 rounded-lg border px-3 py-3 text-base font-medium"
                 >
                   我的账号

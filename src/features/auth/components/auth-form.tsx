@@ -1,10 +1,7 @@
-"use client";
-
-import type { Route } from "next";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowRightIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useNavigate, useRevalidator } from "react-router-dom";
 import { type Resolver, useForm } from "react-hook-form";
 import { toast } from "sonner";
 import { z } from "zod";
@@ -68,7 +65,8 @@ export function AuthForm({
   token?: string;
   nextPath?: string;
 }) {
-  const router = useRouter();
+  const navigate = useNavigate();
+  const revalidator = useRevalidator();
   const config = copy[mode];
   const form = useForm<FormValues>({
     resolver: zodResolver(schemas[mode]) as Resolver<FormValues>,
@@ -84,14 +82,14 @@ export function AuthForm({
     }
     if (mode === "login") {
       toast.success("登录成功");
-      router.push(nextPath as Route);
-      router.refresh();
+      void navigate(nextPath);
+      void revalidator.revalidate();
       return;
     }
     toast.success(
       mode === "register" ? "验证邮件已发送" : mode === "forgot" ? "重置邮件已发送" : "密码已更新"
     );
-    router.push(mode === "register" || mode === "forgot" ? "/verify-email" : "/login");
+    void navigate(mode === "register" || mode === "forgot" ? "/verify-email" : "/login");
   }
 
   return (
@@ -121,7 +119,7 @@ export function AuthForm({
               <div className="flex items-center justify-between">
                 <FieldLabel htmlFor="password">密码</FieldLabel>
                 {mode === "login" ? (
-                  <Link href="/forgot-password" className="text-xs text-primary hover:underline">
+                  <Link to="/forgot-password" className="text-xs text-primary hover:underline">
                     忘记密码？
                   </Link>
                 ) : null}
@@ -152,19 +150,19 @@ export function AuthForm({
         {mode === "login" ? (
           <>
             还没有账号？{" "}
-            <Link href="/register" className="font-medium text-primary hover:underline">
+            <Link to="/register" className="font-medium text-primary hover:underline">
               立即注册
             </Link>
           </>
         ) : mode === "register" ? (
           <>
             已有账号？{" "}
-            <Link href="/login" className="font-medium text-primary hover:underline">
+            <Link to="/login" className="font-medium text-primary hover:underline">
               返回登录
             </Link>
           </>
         ) : (
-          <Link href="/login" className="font-medium text-primary hover:underline">
+          <Link to="/login" className="font-medium text-primary hover:underline">
             返回登录
           </Link>
         )}

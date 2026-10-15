@@ -1,7 +1,4 @@
-"use client";
-
-import type { Route } from "next";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import {
   ExternalLinkIcon,
   FolderTreeIcon,
@@ -409,7 +406,7 @@ export function TaxonomyManager({
                     ) : null}
                     <CardFooter className={styles.itemActions}>
                       <Button asChild variant="outline" size="sm">
-                        <Link href={`/${type}/${item.slug}` as Route}>
+                        <Link to={`/${type}/${item.slug}`}>
                           <ExternalLinkIcon data-icon="inline-start" />
                           查看页面
                         </Link>

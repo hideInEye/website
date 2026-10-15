@@ -1,0 +1,25 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta name="theme-color" content="#f8f4eb" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#151923" media="(prefers-color-scheme: dark)" />
+    <meta name="description" content="把代码、生活和途中看到的光，留在这里。" />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="alternate" type="application/rss+xml" href="/rss.xml" title="日落的足迹 RSS" />
+    <title>日落的足迹</title>
+    <script>
+      try {
+        const theme = localStorage.getItem("theme") || "system";
+        const dark = theme === "dark" || (theme === "system" && matchMedia("(prefers-color-scheme: dark)").matches);
+        document.documentElement.classList.toggle("dark", dark);
+      } catch (_) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

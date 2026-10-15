@@ -51,6 +51,9 @@
 }
 
 :root {
+  --font-noto-sans-sc: "Noto Sans SC Variable", sans-serif;
+  --font-literary: "LXGW WenKai", "STKaiti", serif;
+  --font-jetbrains-mono: "JetBrains Mono Variable", monospace;
   --radius: 0.75rem;
   --background: oklch(0.975 0.012 82);
   --foreground: oklch(0.205 0.025 252);

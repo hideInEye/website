@@ -1,5 +1,4 @@
-import type { Route } from "next";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { ChevronLeftIcon, ChevronRightIcon } from "lucide-react";
 
 import { buttonVariants } from "@/components/ui/button";
@@ -19,7 +18,7 @@ export function Pagination({
     <nav className="mt-10 flex items-center justify-between border-t pt-6" aria-label="分页">
       {currentPage > 1 ? (
         <Link
-          href={buildHref(currentPage - 1) as Route}
+          to={buildHref(currentPage - 1)}
           className={buttonVariants({ variant: "outline" })}
         >
           <ChevronLeftIcon data-icon="inline-start" />
@@ -33,7 +32,7 @@ export function Pagination({
       </span>
       {currentPage < totalPages ? (
         <Link
-          href={buildHref(currentPage + 1) as Route}
+          to={buildHref(currentPage + 1)}
           className={cn(buttonVariants({ variant: "outline" }))}
         >
           下一页

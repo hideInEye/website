@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "react-router-dom";
 
 import { SunsetMark } from "@/components/sunset-mark";
 import { SITE_CONFIG } from "@/config/site";
@@ -15,13 +15,13 @@ export function SiteFooter() {
           <p>{SITE_CONFIG.description}</p>
         </div>
         <div className="flex flex-wrap items-start gap-x-5 gap-y-2 md:justify-end">
-          <Link href="/about" className="hover:text-foreground">
+          <Link to="/about" className="hover:text-foreground">
             关于
           </Link>
-          <Link href="/rss.xml" className="hover:text-foreground">
+          <Link to="/rss.xml" className="hover:text-foreground">
             RSS
           </Link>
-          <Link href="/admin" className="hover:text-foreground">
+          <Link to="/admin" className="hover:text-foreground">
             管理
           </Link>
           <a

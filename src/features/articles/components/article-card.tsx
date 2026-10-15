@@ -1,4 +1,4 @@
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { ArrowUpRightIcon, Clock3Icon } from "lucide-react";
 
 import { Badge } from "@/components/ui/badge";
@@ -32,7 +32,7 @@ export function ArticleCard({ post, featured = false }: { post: PostSummary; fea
           }
         >
           <Link
-            href={`/articles/${post.slug}`}
+            to={`/articles/${post.slug}`}
             className="after:absolute after:inset-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring"
           >
             {post.title}

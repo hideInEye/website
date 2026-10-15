@@ -1,5 +1,4 @@
-import type { Route } from "next";
-import Link from "next/link";
+import { Link } from "react-router-dom";
 import { ArrowUpRightIcon, FolderTreeIcon, TagsIcon } from "lucide-react";
 
 import { PageHeading } from "@/components/page-heading";
@@ -50,13 +49,13 @@ export function TaxonomyDirectory({
       {items.length > 0 ? (
         <section className={styles.grid} aria-label={label + "列表"}>
           {items.map((item) => {
-            const href = ("/" + basePath + "/" + item.slug) as Route;
+            const href = ("/" + basePath + "/" + item.slug);
 
             return (
               <Card key={item.id} className={styles.card}>
                 <CardHeader className={styles.cardHeader}>
                   <CardTitle>
-                    <Link href={href} className={styles.titleLink}>
+                    <Link to={href} className={styles.titleLink}>
                       {isCategory ? item.name : "# " + item.name}
                     </Link>
                   </CardTitle>
@@ -71,7 +70,7 @@ export function TaxonomyDirectory({
                 </CardContent>
                 <CardFooter className={styles.cardFooter}>
                   <Button asChild variant="ghost" size="sm" className={styles.cardAction}>
-                    <Link href={href}>
+                    <Link to={href}>
                       浏览{label}
                       <ArrowUpRightIcon data-icon="inline-end" />
                     </Link>

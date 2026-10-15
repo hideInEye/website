@@ -1,8 +1,6 @@
-"use client";
-
 import { useState } from "react";
 import { AlertCircleIcon, EyeIcon, ImageUpIcon, SaveIcon, SendIcon } from "lucide-react";
-import { useRouter } from "next/navigation";
+import { useNavigate, useRevalidator } from "react-router-dom";
 import { toast } from "sonner";
 
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
@@ -38,7 +36,8 @@ export function PostEditorForm({
   categories: IAdminTaxonomy[];
   tags: IAdminTaxonomy[];
 }) {
-  const router = useRouter();
+  const navigate = useNavigate();
+  const revalidator = useRevalidator();
   const [title, setTitle] = useState(initialPost?.title ?? "");
   const [excerpt, setExcerpt] = useState(initialPost?.excerpt ?? "");
   const [slug, setSlug] = useState(initialPost?.slug ?? "");
@@ -78,8 +77,8 @@ export function PostEditorForm({
       });
       setSlug(saved.slug);
       toast.success(status === "PUBLISHED" ? "文章已发布" : "草稿已保存");
-      if (!initialPost) router.replace(`/admin/posts/${saved.id}/edit`);
-      router.refresh();
+      if (!initialPost) void navigate(`/admin/posts/${saved.id}/edit`, { replace: true });
+      void revalidator.revalidate();
     } catch (error) {
       toast.error(error instanceof ApiClientError ? error.message : "保存失败，请稍后重试");
     } finally {
@@ -238,7 +237,7 @@ export function PostEditorForm({
                   {isUploadingCover ? "正在上传封面" : "也可以直接粘贴已有图片地址。"}
                 </FieldDescription>
                 {coverUrl ? (
-                  // eslint-disable-next-line @next/next/no-img-element
+
                   <img
                     src={coverUrl}
                     alt="封面预览"

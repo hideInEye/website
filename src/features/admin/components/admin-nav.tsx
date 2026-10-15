@@ -1,7 +1,5 @@
-"use client";
-
-import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 import {
   FileTextIcon,
   FolderTreeIcon,
@@ -23,7 +21,7 @@ const items = [
 ] as const;
 
 export function AdminNav() {
-  const pathname = usePathname();
+  const { pathname } = useLocation();
   return (
     <nav className="flex gap-1 overflow-x-auto p-2 lg:flex-col" aria-label="后台导航">
       {items.map(({ href, label, icon: Icon }) => {
@@ -31,7 +29,7 @@ export function AdminNav() {
         return (
           <Link
             key={href}
-            href={href}
+            to={href}
             className={cn(
               "flex shrink-0 items-center gap-2 rounded-lg px-3 py-2 text-sm font-medium text-muted-foreground transition-colors hover:bg-accent hover:text-foreground",
               active && "bg-accent text-accent-foreground"
