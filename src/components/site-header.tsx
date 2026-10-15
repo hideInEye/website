@@ -19,8 +19,8 @@ import { cn } from "@/lib/utils";
 
 const navigation = [
   { href: "/", label: "日志" },
-  { href: "/categories/code-notes", label: "分类" },
-  { href: "/tags/writing", label: "标签" },
+  { href: "/categories", label: "分类" },
+  { href: "/tags", label: "标签" },
   { href: "/about", label: "关于" }
 ] as const;
 
